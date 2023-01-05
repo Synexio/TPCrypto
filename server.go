@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func startServer() {
@@ -20,21 +20,27 @@ func startServer() {
 }
 
 func downloadHandler(w http.ResponseWriter, r *http.Request) {
-	// Open the file
-	f, err := os.Open("./Archive/5_1_2023_12h_31m.txt")
+	Openfile, err := os.Open("Archive/5_1_2023_15h17m.txt")
+	defer Openfile.Close()
+
 	if err != nil {
-		http.Error(w, "File not found", 404)
+		http.Error(w, "File not found.", 404)
 		return
 	}
-	defer f.Close()
 
-	// Set the headers
-	w.Header().Set("Content-Disposition", "attachment; filename=5_1_2023_12h_31m.txt")
-	w.Header().Set("Content-Type", "text/plain")
+	tempBuffer := make([]byte, 512)
+	Openfile.Read(tempBuffer)
+	FileContentType := http.DetectContentType(tempBuffer)
 
-	// Copy the file contents to the response writer
-	_, err = io.Copy(w, f)
-	if err != nil {
-		log.Println(err)
-	}
+	FileStat, _ := Openfile.Stat()
+	FileSize := strconv.FormatInt(FileStat.Size(), 10)
+
+	Filename := "demo_download"
+
+	//Set the headers
+	w.Header().Set("Content-Type", FileContentType+";"+Filename)
+	w.Header().Set("Content-Length", FileSize)
+
+	Openfile.Seek(0, 0)
+	io.Copy(w, Openfile)
 }

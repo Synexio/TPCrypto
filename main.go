@@ -13,7 +13,7 @@ import (
 const (
 	KrakenAPI = "https://api.kraken.com/0/public/"
 	host      = "localhost"
-	port      = "7777"
+	port      = "5432"
 	user      = "toto"
 	password  = "mysecretpassword"
 	dbname    = "mydatabase"
@@ -40,7 +40,7 @@ type ServerStatus struct {
 func main() {
 
 	// Connexion à la base de données
-	connectionString := "host=" + host + " port=" + port + " user=" + user + " password=" + password + " dbname=postgres" + " sslmode=disable"
+	connectionString := "host=" + host + " port=" + port + " user=" + user + " password=" + password + " dbname=" + dbname + " sslmode=disable"
 	fmt.Println(connectionString)
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
@@ -136,12 +136,14 @@ func main() {
 
 	fmt.Println("Fichier créé !")
 
-	/* Création de la table si elle n'existe pas
-	sqlStat := "CREATE TABLE IF NOT EXISTS public.pairs ( id SERIAL NOT NULL, altname character varying NOT NULL, base character varying, quote character varying, current_price real, fee_volume_currency character varying, ordermin character varying, costmin character varying, status character varying PRIMARY KEY (id) ); ALTER TABLE IF EXISTS public.pairs OWNER to toto;"
+	// Création de la table si elle n'existe pas
+	sqlStat := "CREATE TABLE IF NOT EXISTS public.pairs2 ( id SERIAL NOT NULL, altname character varying NOT NULL, base character varying, quote character varying, current_price character varying, fee_volume_currency character varying, ordermin character varying, costmin character varying, status character varying, PRIMARY KEY (id) ); ALTER TABLE IF EXISTS public.pairs OWNER to toto;"
 	_, errors = db.Exec(sqlStat)
 	if errors != nil {
 		fmt.Println(errors)
 		panic(err)
+	} else {
+		fmt.Println("Table OK")
 	}
 
 	// Enregistrement des données dans la base de données
@@ -150,7 +152,7 @@ func main() {
 	for _, value := range resultMap {
 		pairMap := value.(map[string]interface{})
 		// Insertion des données dans la base de données
-		sqlStatement := fmt.Sprintf("INSERT INTO coins (id, altname, base, quote, current_price, fee_volume_currency, ordermin, costmin, status) VALUES (%d, '%s', '%s', %f, %s, %s, %s, %s, %s)", now, pairMap["altname"], pairMap["base"], pairMap["quote"], tickers[i], pairMap["fee_volume_currency"], pairMap["ordermin"], pairMap["costmin"], pairMap["status"])
+		sqlStatement := fmt.Sprintf("INSERT INTO pairs2 (id, altname, base, quote, current_price, fee_volume_currency, ordermin, costmin, status) VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", now, pairMap["altname"], pairMap["base"], pairMap["quote"], tickers[i], pairMap["fee_volume_currency"], pairMap["ordermin"], pairMap["costmin"], pairMap["status"])
 		_, err := db.Exec(sqlStatement)
 		if err != nil {
 			fmt.Println(err)
@@ -159,15 +161,8 @@ func main() {
 		// Eviter les collisions de clé primaire
 		now++
 		i += 3
-	}*/
-	sqlStat := "SELECT * FROM information_schema"
-	fmt.Println(sqlStat)
-	_, erro := db.Exec(sqlStat)
-	if erro != nil {
-		fmt.Println("toto", erro)
-		panic(erro)
 	}
 
-	//startServer()
+	startServer()
 
 }
