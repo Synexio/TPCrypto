@@ -35,7 +35,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 	FileStat, _ := Openfile.Stat()
 	FileSize := strconv.FormatInt(FileStat.Size(), 10)
 
-	Filename := "demo_download"
+	Filename := "5_1_2023_15h17m.txt"
 
 	//Set the headers
 	w.Header().Set("Content-Type", FileContentType+";"+Filename)
