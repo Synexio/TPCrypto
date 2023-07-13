@@ -48,6 +48,7 @@ func main() {
 	} else {
 		fmt.Println("Connecté à postgres !")
 	}
+	defer db.Close()
 
 	// Requête du ServerTime
 	request := QueryKraken("Time")
@@ -68,7 +69,7 @@ func main() {
 	}
 
 	// Requête des pairs
-	request = QueryKraken("AssetPairs?pair=XXBTZUSD,XETHXXBT")
+	request = QueryKraken("AssetPairs")
 	var assetPairs map[string]interface{}
 	errors = json.Unmarshal(request.([]byte), &assetPairs)
 	if errors != nil {
@@ -77,7 +78,7 @@ func main() {
 	resultMap := assetPairs["result"].(map[string]interface{})
 
 	// Requête des ticker
-	request = QueryKraken("Ticker?pair=XXBTZUSD,XETHXXBT")
+	request = QueryKraken("Ticker")
 	var ticker map[string]interface{}
 	errors = json.Unmarshal(request.([]byte), &ticker)
 	if errors != nil {
