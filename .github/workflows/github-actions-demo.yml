@@ -22,5 +22,8 @@ jobs:
         with:
           go-version: '1.19.3'
 
+      - name: Go get main
+        run: go get main
+
       - name: Build
         run: go build .
