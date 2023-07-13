@@ -1,0 +1,24 @@
+Sauvegarde du 5_1_2023_15h21m
+
+L'unixtime est de : 1672928474
+La date du serveur est : Thu, 05 Jan 23 14:21:14 +0000
+Le status du serveur est : online
+Le timestamp est : 2023-01-05T14:21:14Z
+
+ETHXBT :
+Base : XETH
+Quote : XXBT
+Current price : 0.074350
+Fee Volume Currency : ZUSD
+Order min : 0.01
+Cost min : 0.00002
+Status : online
+
+XBTUSD :
+Base : XXBT
+Quote : ZUSD
+Current price : 16799.90000
+Fee Volume Currency : ZUSD
+Order min : 0.0001
+Cost min : 0.5
+Status : online
