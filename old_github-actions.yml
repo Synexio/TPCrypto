@@ -1,0 +1,29 @@
+name: Test Github Action
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  docker:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Start containers
+        run: docker-compose -f "old_github-actions.yml" up -d --build
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.19.3'
+
+      - name: Go get main
+        run: go get main
+
+      - name: Build
+        run: go build .

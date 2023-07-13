@@ -12,7 +12,7 @@ import (
 
 const (
 	KrakenAPI = "https://api.kraken.com/0/public/"
-	host      = "db"
+	host      = "localhost"
 	port      = "5432"
 	user      = "toto"
 	password  = "mysecretpassword"

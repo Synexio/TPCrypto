@@ -1,29 +1,33 @@
-name: Test Github Action
+name: ci
 
 on:
   push:
     branches:
-      - dev
+      - 'main'
 
 jobs:
   docker:
-    timeout-minutes: 10
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
+      -
+        name: Checkout
         uses: actions/checkout@v3
-
-      - name: Start containers
-        run: docker-compose -f "docker-compose.yml" up -d --build
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
-          go-version: '1.19.3'
-
-      - name: Go get main
-        run: go get main
-
-      - name: Build
-        run: go build .
+          username: synexio
+          password: dckr_pat_N87RzJPApVYvY2h9IIbTPujnzKU
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: synexio/goapp:latest
